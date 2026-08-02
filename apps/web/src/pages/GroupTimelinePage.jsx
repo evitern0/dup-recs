@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth.js';
+import { useAuth } from '../hooks/useAuth.jsx';
 import { MemberList } from '../components/groups/MemberList.jsx';
 import { InviteForm } from '../components/groups/InviteForm.jsx';
 import { NewRecComposer } from '../components/timeline/NewRecComposer.jsx';

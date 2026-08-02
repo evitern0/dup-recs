@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth.js';
+import { useAuth } from '../hooks/useAuth.jsx';
 import { ProfileHeader } from '../components/profile/ProfileHeader.jsx';
 import { ProfileTimeline } from '../components/profile/ProfileTimeline.jsx';
 

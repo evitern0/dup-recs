@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { useAuth } from './hooks/useAuth.js';
+import { useAuth } from './hooks/useAuth.jsx';
 import { AuthPage } from './pages/AuthPage.jsx';
 import { GroupTimelinePage } from './pages/GroupTimelinePage.jsx';
 import { MemberProfilePage } from './pages/MemberProfilePage.jsx';

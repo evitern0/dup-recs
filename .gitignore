@@ -1,6 +1,10 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
 build/
+
 coverage/
 *.log
 .env
@@ -11,3 +15,6 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+
+# pnpm store metadata / local store
+.pnpm-store/

@@ -30,7 +30,7 @@
 - [X] T007 Implement Passport auth setup with OAuth strategies and JWT issuance in `/Users/npoq/Dev/dup-recs/apps/api/src/auth/`
 - [X] T008 Set up Express app wiring, middleware, error handling, and route registration in `/Users/npoq/Dev/dup-recs/apps/api/src/app.ts`
 - [X] T009 [P] Implement database access helpers and group membership authorization checks in `/Users/npoq/Dev/dup-recs/apps/api/src/lib/db.ts` and `/Users/npoq/Dev/dup-recs/apps/api/src/lib/authorization.ts`
-- [X] T010 [P] Add shared API client and session bootstrap utilities for the frontend in `/Users/npoq/Dev/dup-recs/apps/web/src/services/api.js` and `/Users/npoq/Dev/dup-recs/apps/web/src/hooks/useAuth.js`
+- [X] T010 [P] Add shared API client and session bootstrap utilities for the frontend in `/Users/npoq/Dev/dup-recs/apps/web/src/services/api.js` and `/Users/npoq/Dev/dup-recs/apps/web/src/hooks/useAuth.jsx`
 - [X] T011 Create API and frontend test harness configuration in `/Users/npoq/Dev/dup-recs/apps/api/tests/` and `/Users/npoq/Dev/dup-recs/apps/web/tests/`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel.

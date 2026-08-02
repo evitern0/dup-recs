@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { MemberProfilePage } from '../../src/pages/MemberProfilePage.jsx';
 
-vi.mock('../../src/hooks/useAuth.js', () => ({
+vi.mock('../../src/hooks/useAuth.jsx', () => ({
   useAuth: () => ({
     apiRequest: async () => ({ user: { username: 'demo' }, posts: [] })
   })
