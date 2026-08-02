@@ -1,0 +1,54 @@
+import { Router } from 'express';
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
+import { assertLength, assertUsername, isEmail } from '@dup-recs/shared';
+
+export function buildAuthRouter(database) {
+  const router = Router();
+
+  router.post('/register', (request, response, next) => {
+    try {
+      const { email, username, password } = request.body ?? {};
+      if (!isEmail(email)) {
+        return response.status(400).json({ error: 'valid email is required' });
+      }
+      assertUsername(username);
+      assertLength(password, 255, 'password');
+
+      const user = database.createUser({ email, username, password });
+      const token = jwt.sign({ sub: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET ?? 'dev-secret');
+      return response.status(201).json({ user: sanitizeUser(user), token });
+    } catch (error) {
+      return next(error);
+    }
+  });
+
+  router.post('/login', (request, response, next) => {
+    passport.authenticate('local', { session: false }, (error, user, info) => {
+      if (error) {
+        return next(error);
+      }
+      if (!user) {
+        return response.status(401).json({ error: info?.message ?? 'invalid credentials' });
+      }
+
+      const token = jwt.sign({ sub: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET ?? 'dev-secret');
+      return response.json({ user: sanitizeUser(user), token });
+    })(request, response, next);
+  });
+
+  router.get('/me', passport.authenticate('jwt', { session: false }), (request, response) => {
+    response.json({ user: sanitizeUser(request.user) });
+  });
+
+  return router;
+}
+
+function sanitizeUser(user) {
+  return {
+    id: user.id,
+    email: user.email,
+    username: user.username,
+    createdAt: user.createdAt
+  };
+}

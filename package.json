@@ -1,0 +1,17 @@
+{
+  "name": "dup-recs",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "pnpm --filter @dup-recs/api dev & pnpm --filter @dup-recs/web dev",
+    "test": "pnpm --filter @dup-recs/api test && pnpm --filter @dup-recs/web test",
+    "lint": "pnpm -r lint"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
