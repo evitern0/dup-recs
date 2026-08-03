@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import passport from 'passport';
 import { configurePassport } from './auth/passport.js';
 import { buildAuthRouter } from './auth/routes.js';
@@ -11,6 +12,10 @@ export function createApp(database) {
   configurePassport(database);
 
   const app = express();
+  app.use(cors({ 
+    origin: 'http://localhost:5173', 
+    credentials: true 
+  }));
   app.use(express.json());
   app.use(passport.initialize());
 
