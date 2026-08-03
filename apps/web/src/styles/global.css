@@ -69,6 +69,13 @@ a {
   margin-bottom: 20px;
 }
 
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
 .brand {
   display: flex;
   flex-direction: column;
@@ -84,6 +91,13 @@ a {
 .meta,
 .small-copy {
   color: var(--muted);
+}
+
+.brand-mark {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  object-fit: contain;
 }
 
 .button,

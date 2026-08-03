@@ -11,9 +11,12 @@ export default function App() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <div className="brand">
-          <strong>dup-recs</strong>
-          <span>Private group music recommendations</span>
+        <div className="brand-lockup">
+          <div className="brand">
+            <strong>dup-recs</strong>
+            <span>Private group music recommendations</span>
+          </div>
+          <img className="brand-mark" src="/header-mark.svg" alt="dup-recs mark" />
         </div>
         {session.user ? (
           <div className="row">
