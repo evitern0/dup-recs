@@ -16,6 +16,13 @@ export interface GroupPayload {
   };
 }
 
+export interface UserGroupsPayload {
+  groups: Array<{
+    id: string;
+    name: string;
+  }>;
+}
+
 export interface InvitationPayload {
   invitation: {
     id: string;

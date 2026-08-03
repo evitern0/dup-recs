@@ -6,13 +6,14 @@ const STORAGE_KEY = 'dup-recs.session';
 
 function loadSession() {
   if (typeof window === 'undefined') {
-    return { token: null, user: null, activeGroupId: null };
+    return { token: null, user: null, activeGroupId: null, groups: [] };
   }
 
   try {
-    return JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? '{}') ?? {};
+    const storedSession = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? '{}') ?? {};
+    return { token: null, user: null, activeGroupId: null, groups: [], ...storedSession };
   } catch {
-    return { token: null, user: null, activeGroupId: null };
+    return { token: null, user: null, activeGroupId: null, groups: [] };
   }
 }
 
@@ -24,20 +25,46 @@ export function AuthProvider({ children }) {
   }, [session]);
 
   const value = useMemo(() => {
+    function normalizeActiveGroupId(groups, preferredActiveGroupId = null) {
+      if (groups.length === 1) {
+        return groups[0].id;
+      }
+
+      if (preferredActiveGroupId && groups.some((group) => group.id === preferredActiveGroupId)) {
+        return preferredActiveGroupId;
+      }
+
+      return null;
+    }
+
+    async function loadMemberships(token, user, preferredActiveGroupId = null) {
+      const data = await apiRequest('/groups/mine', { token });
+      const groups = data.groups ?? [];
+      const activeGroupId = normalizeActiveGroupId(groups, preferredActiveGroupId);
+      setSession({ token, user, groups, activeGroupId });
+      return { token, user, groups, activeGroupId };
+    }
+
     async function register(payload) {
       const data = await apiRequest('/auth/register', { method: 'POST', body: payload });
-      setSession({ token: data.token, user: data.user, activeGroupId: session.activeGroupId ?? null });
-      return data;
+      return loadMemberships(data.token, data.user);
     }
 
     async function login(payload) {
       const data = await apiRequest('/auth/login', { method: 'POST', body: payload });
-      setSession({ token: data.token, user: data.user, activeGroupId: session.activeGroupId ?? null });
-      return data;
+      return loadMemberships(data.token, data.user);
+    }
+
+    async function refreshMemberships(preferredActiveGroupId = null) {
+      if (!session.token || !session.user) {
+        return { token: null, user: null, groups: [], activeGroupId: null };
+      }
+
+      return loadMemberships(session.token, session.user, preferredActiveGroupId);
     }
 
     function logout() {
-      setSession({ token: null, user: null, activeGroupId: null });
+      setSession({ token: null, user: null, activeGroupId: null, groups: [] });
     }
 
     function setActiveGroupId(activeGroupId) {
@@ -49,6 +76,7 @@ export function AuthProvider({ children }) {
       setSession,
       register,
       login,
+      refreshMemberships,
       logout,
       setActiveGroupId,
       apiRequest: (path, options = {}) => apiRequest(path, { ...options, token: session.token })
