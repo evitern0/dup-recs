@@ -1,5 +1,5 @@
-export function requireMembership(database, groupId, userId) {
-  const membership = database.getMembership(groupId, userId);
+export async function requireMembership(database, groupId, userId) {
+  const membership = await database.getMembership(groupId, userId);
   if (!membership) {
     const error = new Error('membership required');
     error.statusCode = 403;
@@ -8,6 +8,6 @@ export function requireMembership(database, groupId, userId) {
   return membership;
 }
 
-export function canAccessGroup(database, groupId, userId) {
-  return Boolean(database.getMembership(groupId, userId));
+export async function canAccessGroup(database, groupId, userId) {
+  return Boolean(await database.getMembership(groupId, userId));
 }

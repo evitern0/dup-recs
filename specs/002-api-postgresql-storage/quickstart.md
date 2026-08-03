@@ -79,6 +79,42 @@ Expected result:
 - Affected requests fail with explicit recoverable errors.
 - Responses do not leak sensitive connection or SQL details.
 
+## Migration Rollback and Forward-Fix Runbook
+
+- Before applying migrations, snapshot the database or ensure point-in-time recovery is available.
+- Apply migrations in lexical order, excluding legacy `001_initial.sql`:
+
+```bash
+for f in apps/api/migrations/00[2-9]_*.sql; do
+  echo "Applying $f"
+  psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "$f"
+done
+```
+
+- If a migration fails before commit:
+  - Stop deploy traffic to the API.
+  - Re-run from the failed file after fixing syntax/environment issues.
+- If a migration fails after partial deployment:
+  - Prefer a forward-fix migration (new numbered SQL file) over editing applied files.
+  - If rollback is required, restore from snapshot and redeploy the previous API build.
+
+## Observability Troubleshooting Map
+
+Use these event names and fields to diagnose failures without reading sensitive data:
+
+- `database_startup_failed`
+  - Fields: `port`, `error.message`, `error.code`
+  - Indicates startup connectivity or migration initialization issues.
+- `database_connectivity_check_failed`
+  - Fields: `error.message`, `error.code`
+  - Indicates runtime store reachability failure at initialization.
+- `group_*_failed`, `timeline_load_failed`, `album_share_create_failed`, `comment_*_failed`
+  - Fields: `requestId`, `path`, `error.message`, `error.code`
+  - Correlate with client-reported failures via `x-request-id` response header.
+- `*_request_failed`
+  - Fields: `requestId`, `method`, `path`, `statusCode`, `error.message`, `error.code`
+  - Indicates surfaced API errors after route-level handling.
+
 ## Test Commands
 
 Run API suites that validate contracts and user flows:

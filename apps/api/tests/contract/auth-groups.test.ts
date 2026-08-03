@@ -5,7 +5,7 @@ import { createDatabase } from '../../src/lib/db.js';
 import { startTestServer } from '../test-server.js';
 
 test('registers a user and creates a group', async () => {
-  const database = createDatabase();
+  const database = await createDatabase();
   const { server, baseUrl, close } = await startTestServer(createApp(database));
 
   try {
@@ -19,6 +19,7 @@ test('registers a user and creates a group', async () => {
     assert.equal(registerResponse.status, 201);
     assert.equal(registerBody.user.username, 'alice');
     assert.equal(typeof registerBody.token, 'string');
+    assert.match(registerBody.user.id, /^[0-9a-f-]{36}$/i);
 
     const groupResponse = await fetch(`${baseUrl}/api/groups`, {
       method: 'POST',
@@ -29,8 +30,16 @@ test('registers a user and creates a group', async () => {
 
     assert.equal(groupResponse.status, 201);
     assert.equal(groupBody.group.name, 'Morning Mix');
+
+    const meResponse = await fetch(`${baseUrl}/api/auth/me`, {
+      headers: { Authorization: `Bearer ${registerBody.token}` }
+    });
+    const meBody = await meResponse.json();
+    assert.equal(meResponse.status, 200);
+    assert.equal(meBody.user.id, registerBody.user.id);
   } finally {
     await close();
+    await database.close();
     server.unref();
   }
 });

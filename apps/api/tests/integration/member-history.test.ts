@@ -5,7 +5,7 @@ import { createDatabase } from '../../src/lib/db.js';
 import { startTestServer } from '../test-server.js';
 
 test('loads a member profile history in chronological order', async () => {
-  const database = createDatabase();
+  const database = await createDatabase();
   const { server, baseUrl, close } = await startTestServer(createApp(database));
 
   try {
@@ -42,6 +42,7 @@ test('loads a member profile history in chronological order', async () => {
     assert.equal(profile.posts.length, 1);
   } finally {
     await close();
+    await database.close();
     server.unref();
   }
 });

@@ -5,7 +5,7 @@ import { createDatabase } from '../../src/lib/db.js';
 import { startTestServer } from '../test-server.js';
 
 test('member history contract shape', async () => {
-  const database = createDatabase();
+  const database = await createDatabase();
   const { server, baseUrl, close } = await startTestServer(createApp(database));
 
   try {
@@ -41,8 +41,20 @@ test('member history contract shape', async () => {
     assert.equal(historyPayload.user.username, owner.user.username);
     assert.equal(Array.isArray(historyPayload.posts), true);
     assert.equal(typeof historyPayload.posts[0].id, 'string');
+
+    const outsider = await fetch(`${baseUrl}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'outsider-history@example.com', username: 'outsider_history', password: 'secret123' })
+    }).then((response) => response.json());
+
+    const deniedResponse = await fetch(`${baseUrl}/api/users/${owner.user.username}/posts`, {
+      headers: { Authorization: `Bearer ${outsider.token}` }
+    });
+    assert.equal(deniedResponse.status, 403);
   } finally {
     await close();
+    await database.close();
     server.unref();
   }
 });

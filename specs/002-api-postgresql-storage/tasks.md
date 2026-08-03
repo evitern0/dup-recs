@@ -29,9 +29,9 @@ description: "Task list for API PostgreSQL storage migration"
 
 **Purpose**: Add PostgreSQL runtime dependencies and local setup surfaces required for migration work.
 
-- [ ] T001 Add PostgreSQL and UUIDv7 dependencies in apps/api/package.json
-- [ ] T002 Document PostgreSQL 18 and DATABASE_URL local setup in README.md
-- [ ] T003 [P] Add API database environment variable examples in apps/api/.env.example
+- [X] T001 Add PostgreSQL and UUIDv7 dependencies in apps/api/package.json
+- [X] T002 Document PostgreSQL 18 and DATABASE_URL local setup in README.md
+- [X] T003 [P] Add API database environment variable examples in apps/api/.env.example
 
 ---
 
@@ -41,13 +41,13 @@ description: "Task list for API PostgreSQL storage migration"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T004 Add UUIDv7-friendly base schema migration for all core entities in apps/api/migrations/002_uuidv7_base.sql
-- [ ] T005 Add relational and timeline-performance indexes in apps/api/migrations/003_indexes.sql
-- [ ] T006 [P] Add migration runner utility for ordered SQL execution in apps/api/src/lib/migrations.ts
-- [ ] T007 [P] Replace in-memory database bootstrap with PostgreSQL pool/bootstrap module in apps/api/src/lib/db.ts
-- [ ] T008 [P] Add shared query helpers and transaction wrapper utilities in apps/api/src/lib/sql.ts
-- [ ] T009 Define database-backed repository interface for users/groups/posts/comments/invites in apps/api/src/lib/repository.ts
-- [ ] T010 Wire API startup to initialize PostgreSQL connection and fail fast on startup connection errors in apps/api/src/index.ts
+- [X] T004 Add UUIDv7-friendly base schema migration for all core entities in apps/api/migrations/002_uuidv7_base.sql
+- [X] T005 Add relational and timeline-performance indexes in apps/api/migrations/003_indexes.sql
+- [X] T006 [P] Add migration runner utility for ordered SQL execution in apps/api/src/lib/migrations.ts
+- [X] T007 [P] Replace in-memory database bootstrap with PostgreSQL pool/bootstrap module in apps/api/src/lib/db.ts
+- [X] T008 [P] Add shared query helpers and transaction wrapper utilities in apps/api/src/lib/sql.ts
+- [X] T009 Define database-backed repository interface for users/groups/posts/comments/invites in apps/api/src/lib/repository.ts
+- [X] T010 Wire API startup to initialize PostgreSQL connection and fail fast on startup connection errors in apps/api/src/index.ts
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel.
 
@@ -61,21 +61,21 @@ description: "Task list for API PostgreSQL storage migration"
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add contract coverage for durable write-read behavior in apps/api/tests/contract/auth-groups.test.ts
-- [ ] T012 [P] [US1] Add integration restart-durability scenario in apps/api/tests/integration/timeline-posting.test.ts
+- [X] T011 [P] [US1] Add contract coverage for durable write-read behavior in apps/api/tests/contract/auth-groups.test.ts
+- [X] T012 [P] [US1] Add integration restart-durability scenario in apps/api/tests/integration/timeline-posting.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T013 [P] [US1] Implement PostgreSQL user persistence operations with UUIDv7 IDs in apps/api/src/users/service.ts
-- [ ] T014 [P] [US1] Implement PostgreSQL group and membership persistence operations in apps/api/src/groups/members.ts
-- [ ] T015 [P] [US1] Implement PostgreSQL invite persistence and acceptance operations in apps/api/src/groups/invites.ts
-- [ ] T016 [P] [US1] Implement PostgreSQL post persistence and timeline pagination queries in apps/api/src/posts/service.ts
-- [ ] T017 [P] [US1] Implement PostgreSQL comment persistence and ordered retrieval queries in apps/api/src/comments/service.ts
-- [ ] T018 [US1] Update auth route handlers to use PostgreSQL-backed user flows in apps/api/src/auth/routes.ts
-- [ ] T019 [US1] Update group route handlers to use PostgreSQL-backed membership/invite flows in apps/api/src/groups/routes.ts
-- [ ] T020 [US1] Update post route handlers to use PostgreSQL-backed timeline/post flows in apps/api/src/posts/routes.ts
-- [ ] T021 [US1] Update comment route handlers to use PostgreSQL-backed comment flows in apps/api/src/comments/routes.ts
-- [ ] T022 [US1] Update user profile route handlers to use PostgreSQL-backed member-history queries in apps/api/src/users/routes.ts
+- [X] T013 [P] [US1] Implement PostgreSQL user persistence operations with UUIDv7 IDs in apps/api/src/users/service.ts
+- [X] T014 [P] [US1] Implement PostgreSQL group and membership persistence operations in apps/api/src/groups/members.ts
+- [X] T015 [P] [US1] Implement PostgreSQL invite persistence and acceptance operations in apps/api/src/groups/invites.ts
+- [X] T016 [P] [US1] Implement PostgreSQL post persistence and timeline pagination queries in apps/api/src/posts/service.ts
+- [X] T017 [P] [US1] Implement PostgreSQL comment persistence and ordered retrieval queries in apps/api/src/comments/service.ts
+- [X] T018 [US1] Update auth route handlers to use PostgreSQL-backed user flows in apps/api/src/auth/routes.ts
+- [X] T019 [US1] Update group route handlers to use PostgreSQL-backed membership/invite flows in apps/api/src/groups/routes.ts
+- [X] T020 [US1] Update post route handlers to use PostgreSQL-backed timeline/post flows in apps/api/src/posts/routes.ts
+- [X] T021 [US1] Update comment route handlers to use PostgreSQL-backed comment flows in apps/api/src/comments/routes.ts
+- [X] T022 [US1] Update user profile route handlers to use PostgreSQL-backed member-history queries in apps/api/src/users/routes.ts
 
 **Checkpoint**: User Story 1 is independently functional with persistent data across API restarts.
 
@@ -89,17 +89,17 @@ description: "Task list for API PostgreSQL storage migration"
 
 ### Tests for User Story 2
 
-- [ ] T023 [P] [US2] Add contract assertions for unchanged endpoint payload semantics in apps/api/tests/contract/invites-comments.test.ts
-- [ ] T024 [P] [US2] Add contract assertions for membership boundary behavior in apps/api/tests/contract/member-history.test.ts
-- [ ] T025 [P] [US2] Add integration regression for register-group-post-comment flow in apps/api/tests/integration/invites-comments.test.ts
-- [ ] T026 [P] [US2] Add integration regression for member history ordering and visibility in apps/api/tests/integration/member-history.test.ts
+- [X] T023 [P] [US2] Add contract assertions for unchanged endpoint payload semantics in apps/api/tests/contract/invites-comments.test.ts
+- [X] T024 [P] [US2] Add contract assertions for membership boundary behavior in apps/api/tests/contract/member-history.test.ts
+- [X] T025 [P] [US2] Add integration regression for register-group-post-comment flow in apps/api/tests/integration/invites-comments.test.ts
+- [X] T026 [P] [US2] Add integration regression for member history ordering and visibility in apps/api/tests/integration/member-history.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T027 [US2] Preserve text-length validation and normalized input behavior in PostgreSQL-backed services in apps/api/src/posts/service.ts
-- [ ] T028 [US2] Preserve text-length validation and normalized input behavior in PostgreSQL-backed services in apps/api/src/comments/service.ts
-- [ ] T029 [US2] Preserve membership authorization checks for group-scoped reads/writes in apps/api/src/lib/authorization.ts
-- [ ] T030 [US2] Align Passport auth lookups and credential verification with PostgreSQL-backed users in apps/api/src/auth/passport.ts
+- [X] T027 [US2] Preserve text-length validation and normalized input behavior in PostgreSQL-backed services in apps/api/src/posts/service.ts
+- [X] T028 [US2] Preserve text-length validation and normalized input behavior in PostgreSQL-backed services in apps/api/src/comments/service.ts
+- [X] T029 [US2] Preserve membership authorization checks for group-scoped reads/writes in apps/api/src/lib/authorization.ts
+- [X] T030 [US2] Align Passport auth lookups and credential verification with PostgreSQL-backed users in apps/api/src/auth/passport.ts
 
 **Checkpoint**: Existing API behavior remains stable while backed by PostgreSQL.
 
@@ -113,14 +113,14 @@ description: "Task list for API PostgreSQL storage migration"
 
 ### Tests for User Story 3
 
-- [ ] T031 [P] [US3] Add integration startup failure scenario for unavailable database in apps/api/tests/integration/timeline-posting.test.ts
-- [ ] T032 [P] [US3] Add integration runtime interruption scenario with safe error responses in apps/api/tests/integration/invites-comments.test.ts
+- [X] T031 [P] [US3] Add integration startup failure scenario for unavailable database in apps/api/tests/integration/timeline-posting.test.ts
+- [X] T032 [P] [US3] Add integration runtime interruption scenario with safe error responses in apps/api/tests/integration/invites-comments.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T033 [US3] Add startup readiness and fail-fast handling for missing/invalid DB config in apps/api/src/index.ts
-- [ ] T034 [US3] Add request-level storage error mapping without sensitive leak in apps/api/src/app.ts
-- [ ] T035 [US3] Add transaction boundaries for multi-step writes (group creation, invite acceptance) in apps/api/src/lib/repository.ts
+- [X] T033 [US3] Add startup readiness and fail-fast handling for missing/invalid DB config in apps/api/src/index.ts
+- [X] T034 [US3] Add request-level storage error mapping without sensitive leak in apps/api/src/app.ts
+- [X] T035 [US3] Add transaction boundaries for multi-step writes (group creation, invite acceptance) in apps/api/src/lib/repository.ts
 
 **Checkpoint**: API recovers from interruptions using persisted data and safe failure handling.
 
@@ -130,14 +130,14 @@ description: "Task list for API PostgreSQL storage migration"
 
 **Purpose**: Finalize migration operability and verify release readiness.
 
-- [ ] T036 [P] Add migration rollback/forward-fix runbook notes in specs/002-api-postgresql-storage/quickstart.md
-- [ ] T037 [P] Add repository-level migration policy notes for tracked DDL SQL in README.md
-- [ ] T038 Run full API regression suite and record results in specs/002-api-postgresql-storage/release-notes.md
-- [ ] T039 [P] [US2] Add structured logging utility with request correlation support in apps/api/src/lib/logger.ts
-- [ ] T040 [US2] Instrument group, post, and comment read/write failure paths with structured events in apps/api/src/groups/routes.ts, apps/api/src/posts/routes.ts, and apps/api/src/comments/routes.ts
-- [ ] T041 [US3] Instrument startup and database connectivity failures with structured events in apps/api/src/index.ts and apps/api/src/lib/db.ts
-- [ ] T042 [P] [US3] Add integration assertions for safe failure responses and corresponding diagnostic event emission in apps/api/tests/integration/timeline-posting.test.ts and apps/api/tests/integration/invites-comments.test.ts
-- [ ] T043 [P] Add operator troubleshooting section mapping error classes to log fields in specs/002-api-postgresql-storage/quickstart.md
+- [X] T036 [P] Add migration rollback/forward-fix runbook notes in specs/002-api-postgresql-storage/quickstart.md
+- [X] T037 [P] Add repository-level migration policy notes for tracked DDL SQL in README.md
+- [X] T038 Run full API regression suite and record results in specs/002-api-postgresql-storage/release-notes.md
+- [X] T039 [P] [US2] Add structured logging utility with request correlation support in apps/api/src/lib/logger.ts
+- [X] T040 [US2] Instrument group, post, and comment read/write failure paths with structured events in apps/api/src/groups/routes.ts, apps/api/src/posts/routes.ts, and apps/api/src/comments/routes.ts
+- [X] T041 [US3] Instrument startup and database connectivity failures with structured events in apps/api/src/index.ts and apps/api/src/lib/db.ts
+- [X] T042 [P] [US3] Add integration assertions for safe failure responses and corresponding diagnostic event emission in apps/api/tests/integration/timeline-posting.test.ts and apps/api/tests/integration/invites-comments.test.ts
+- [X] T043 [P] Add operator troubleshooting section mapping error classes to log fields in specs/002-api-postgresql-storage/quickstart.md
 
 ---
 

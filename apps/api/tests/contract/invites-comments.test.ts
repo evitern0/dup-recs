@@ -5,7 +5,7 @@ import { createDatabase } from '../../src/lib/db.js';
 import { startTestServer } from '../test-server.js';
 
 test('invite and comments contract shape', async () => {
-  const database = createDatabase();
+  const database = await createDatabase();
   const { server, baseUrl, close } = await startTestServer(createApp(database));
 
   try {
@@ -35,6 +35,8 @@ test('invite and comments contract shape', async () => {
 
     assert.equal(typeof invitePayload.invitation.id, 'string');
     assert.equal(invitePayload.invitation.groupId, group.group.id);
+    assert.equal(invitePayload.invitation.status, 'pending');
+    assert.equal(typeof invitePayload.invitation.token, 'string');
 
     await fetch(`${baseUrl}/api/groups/join`, {
       method: 'POST',
@@ -63,8 +65,10 @@ test('invite and comments contract shape', async () => {
 
     assert.equal(typeof commentPayload.comment.id, 'string');
     assert.equal(commentPayload.comment.postId, postPayload.post.id);
+    assert.equal(commentPayload.comment.body, 'Contract comment.');
   } finally {
     await close();
+    await database.close();
     server.unref();
   }
 });
