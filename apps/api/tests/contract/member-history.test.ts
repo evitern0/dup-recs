@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createApp } from '../../src/app.js';
 import { createDatabase } from '../../src/lib/db.js';
+import { jsonOf, type AuthPayload, type GroupPayload, type UserPostsPayload } from '../http.js';
 import { startTestServer } from '../test-server.js';
 
 test('member history contract shape', async () => {
@@ -13,13 +14,13 @@ test('member history contract shape', async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: 'history-contract@example.com', username: 'history_contract', password: 'secret123' })
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<AuthPayload>(response));
 
     const group = await fetch(`${baseUrl}/api/groups`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${owner.token}` },
       body: JSON.stringify({ name: 'History Contract Group' })
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<GroupPayload>(response));
 
     await fetch(`${baseUrl}/api/groups/${group.group.id}/posts`, {
       method: 'POST',
@@ -36,7 +37,7 @@ test('member history contract shape', async () => {
 
     const historyPayload = await fetch(`${baseUrl}/api/users/${owner.user.username}/posts`, {
       headers: { Authorization: `Bearer ${owner.token}` }
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<UserPostsPayload>(response));
 
     assert.equal(historyPayload.user.username, owner.user.username);
     assert.equal(Array.isArray(historyPayload.posts), true);
@@ -46,7 +47,7 @@ test('member history contract shape', async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: 'outsider-history@example.com', username: 'outsider_history', password: 'secret123' })
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<AuthPayload>(response));
 
     const deniedResponse = await fetch(`${baseUrl}/api/users/${owner.user.username}/posts`, {
       headers: { Authorization: `Bearer ${outsider.token}` }

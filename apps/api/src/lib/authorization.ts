@@ -1,9 +1,9 @@
+import { AppError } from './sql.js';
+
 export async function requireMembership(database, groupId, userId) {
   const membership = await database.getMembership(groupId, userId);
   if (!membership) {
-    const error = new Error('membership required');
-    error.statusCode = 403;
-    throw error;
+    throw new AppError('membership required', 403, 'MEMBERSHIP_REQUIRED');
   }
   return membership;
 }

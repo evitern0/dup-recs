@@ -200,3 +200,17 @@ description: "Task list for API PostgreSQL storage migration"
 1. One engineer handles migrations/bootstrap (T004-T010).
 2. One engineer handles persistence services/routes for US1 (T013-T022).
 3. One engineer develops and stabilizes test suites for US2/US3 (T023-T032).
+
+---
+
+## Phase 7: Convergence
+
+- [X] T044 Resolve API source typing regressions (Express/Passport user shape and error object properties) so API TypeScript build passes per plan: Language/Version TypeScript and FR-004 (partial)
+- [X] T045 Add typed response payload handling in API contract/integration tests to eliminate `unknown` property-access compiler failures and restore static regression readiness per SC-002 and plan: Testing (partial)
+
+---
+
+## Phase 8: Convergence
+
+- [ ] T046 Remove implicit in-memory fallback from API database bootstrap so runtime storage is PostgreSQL-backed by contract per FR-001 and plan: storage decision (contradicts)
+- [ ] T047 Update durability/regression verification to run restart persistence checks against PostgreSQL-backed configuration (DATABASE_URL required) per SC-001 and SC-005 (partial)

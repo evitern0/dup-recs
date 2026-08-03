@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createApp } from '../../src/app.js';
 import { createDatabase } from '../../src/lib/db.js';
+import { jsonOf, type AuthPayload, type GroupPayload } from '../http.js';
 import { startTestServer } from '../test-server.js';
 
 test('registers a user and creates a group', async () => {
@@ -14,7 +15,7 @@ test('registers a user and creates a group', async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: 'alice@example.com', username: 'alice', password: 'secret123' })
     });
-    const registerBody = await registerResponse.json();
+    const registerBody = await jsonOf<AuthPayload>(registerResponse);
 
     assert.equal(registerResponse.status, 201);
     assert.equal(registerBody.user.username, 'alice');
@@ -26,7 +27,7 @@ test('registers a user and creates a group', async () => {
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${registerBody.token}` },
       body: JSON.stringify({ name: 'Morning Mix' })
     });
-    const groupBody = await groupResponse.json();
+    const groupBody = await jsonOf<GroupPayload>(groupResponse);
 
     assert.equal(groupResponse.status, 201);
     assert.equal(groupBody.group.name, 'Morning Mix');
@@ -34,7 +35,7 @@ test('registers a user and creates a group', async () => {
     const meResponse = await fetch(`${baseUrl}/api/auth/me`, {
       headers: { Authorization: `Bearer ${registerBody.token}` }
     });
-    const meBody = await meResponse.json();
+    const meBody = await jsonOf<AuthPayload>(meResponse);
     assert.equal(meResponse.status, 200);
     assert.equal(meBody.user.id, registerBody.user.id);
   } finally {

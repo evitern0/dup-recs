@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createApp } from '../../src/app.js';
 import { createDatabase } from '../../src/lib/db.js';
+import { jsonOf, type AuthPayload, type GroupPayload, type AlbumSearchPayload, type TimelinePayload } from '../http.js';
 import { startTestServer } from '../test-server.js';
 
 test('searches albums and paginates the timeline', async () => {
@@ -13,17 +14,17 @@ test('searches albums and paginates the timeline', async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: 'bill@example.com', username: 'bill', password: 'secret123' })
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<AuthPayload>(response));
 
     const group = await fetch(`${baseUrl}/api/groups`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${register.token}` },
       body: JSON.stringify({ name: 'Jazz Friends' })
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<GroupPayload>(response));
 
     const search = await fetch(`${baseUrl}/api/albums/search?query=blue&type=album`, {
       headers: { Authorization: `Bearer ${register.token}` }
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<AlbumSearchPayload>(response));
 
     assert.ok(search.results.length > 0);
 
@@ -42,7 +43,7 @@ test('searches albums and paginates the timeline', async () => {
 
     const timeline = await fetch(`${baseUrl}/api/groups/${group.group.id}/timeline?limit=10`, {
       headers: { Authorization: `Bearer ${register.token}` }
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<TimelinePayload>(response));
 
     assert.equal(Array.isArray(timeline.posts), true);
     assert.equal(timeline.posts[0].description, 'Classic session to revisit.');
@@ -62,13 +63,13 @@ test('keeps timeline data after API restart', async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: 'restart-owner@example.com', username: 'restart_owner', password: 'secret123' })
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<AuthPayload>(response));
 
     const group = await fetch(`${first.baseUrl}/api/groups`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${register.token}` },
       body: JSON.stringify({ name: 'Restart Club' })
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<GroupPayload>(response));
 
     await fetch(`${first.baseUrl}/api/groups/${group.group.id}/posts`, {
       method: 'POST',
@@ -90,7 +91,7 @@ test('keeps timeline data after API restart', async () => {
     try {
       const timeline = await fetch(`${second.baseUrl}/api/groups/${group.group.id}/timeline?limit=10`, {
         headers: { Authorization: `Bearer ${register.token}` }
-      }).then((response) => response.json());
+      }).then((response) => jsonOf<TimelinePayload>(response));
 
       assert.equal(timeline.posts.length > 0, true);
       assert.equal(timeline.posts[0].description, 'Restart durability record.');

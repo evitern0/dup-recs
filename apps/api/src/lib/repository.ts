@@ -351,7 +351,10 @@ export function createRepository(pool) {
     };
   }
 
-  async function listGroupPosts(groupId, { limit = INITIAL_TIMELINE_PAGE_SIZE, cursor } = {}) {
+  async function listGroupPosts(
+    groupId,
+    { limit = INITIAL_TIMELINE_PAGE_SIZE, cursor }: { limit?: number; cursor?: string } = {}
+  ) {
     const pageSize = Math.min(Number(limit) || INITIAL_TIMELINE_PAGE_SIZE, TIMELINE_PAGE_SIZE);
     let cursorCreatedAt = null;
 
