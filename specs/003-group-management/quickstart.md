@@ -29,6 +29,7 @@ pnpm install
 
 Expected result:
 - The app opens that group's timeline directly.
+- The top bar includes a Groups entry so the management page is still reachable.
 
 ### 2. Zero-Group Login Routing
 
@@ -37,6 +38,7 @@ Expected result:
 Expected result:
 - The app opens the group-management page.
 - The page shows create-group and join-with-invite actions.
+- Clicking a group name is not available until the user belongs to at least one group.
 
 ### 3. Multi-Group Login Routing
 
@@ -45,6 +47,7 @@ Expected result:
 Expected result:
 - The app opens the group-management page.
 - The page lists each group the user belongs to.
+- Selecting any listed group opens that group's timeline.
 
 ### 4. Group Timeline Navigation
 
@@ -52,6 +55,7 @@ Expected result:
 
 Expected result:
 - The app opens that group's timeline view.
+- Use the Groups button in the header to return to group management at any time.
 
 ### 5. Reachability Check
 

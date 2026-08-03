@@ -221,6 +221,19 @@ export function createRepository(pool) {
     return rows.map((row) => ({ id: String(row.id), username: row.username }));
   }
 
+  async function listUserGroups(userId) {
+    const { rows } = await pool.query(
+      `SELECT groups.id, groups.name
+       FROM memberships
+       JOIN groups ON groups.id = memberships.group_id
+       WHERE memberships.user_id = $1
+       ORDER BY groups.name ASC, groups.id ASC`,
+      [userId]
+    );
+
+    return rows.map((row) => ({ id: String(row.id), name: row.name }));
+  }
+
   async function createInvite({ groupId, email, invitedByUserId }) {
     const token = `invite_${uuidv7()}`;
 
@@ -450,6 +463,7 @@ export function createRepository(pool) {
     assertMembership,
     joinGroup,
     listGroupMembers,
+    listUserGroups,
     createInvite,
     acceptInvite,
     createPost,

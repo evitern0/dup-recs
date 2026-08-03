@@ -9,12 +9,12 @@ export function configurePassport(database) {
       try {
         const user = await database.findUserByEmail(email);
         if (!user) {
-          return done(null, false, { message: 'invalid credentials' });
+          return done(null, false, { message: 'Incorrect email or password. Please try again.' });
         }
 
         const matches = verifyPassword(password, user.passwordHash);
         if (!matches) {
-          return done(null, false, { message: 'invalid credentials' });
+          return done(null, false, { message: 'Incorrect email or password. Please try again.' });
         }
 
         return done(null, user);

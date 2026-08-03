@@ -32,7 +32,7 @@ export function buildAuthRouter(database) {
         return next(error);
       }
       if (!user) {
-        return response.status(401).json({ error: info?.message ?? 'invalid credentials' });
+        return response.status(401).json({ error: info?.message ?? 'Incorrect email or password. Please try again.' });
       }
 
       const token = jwt.sign({ sub: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET ?? 'dev-secret');

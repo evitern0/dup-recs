@@ -28,6 +28,7 @@ export function AuthPage() {
         <p>
           Login or register to see group activity, recommend albums, and comment on the music your friends are sharing.
         </p>
+        <p className="helper">After signing in, you will land in your group timeline or group management page based on how many groups you belong to.</p>
         <div className="row">
           <button className="button" type="button" onClick={() => setMode('login')}>
             Log in

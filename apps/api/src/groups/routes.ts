@@ -7,6 +7,19 @@ import { logEvent, redactError } from '../lib/logger.js';
 export function buildGroupsRouter(database) {
   const router = Router();
 
+  router.get('/mine', passport.authenticate('jwt', { session: false }), async (request, response, next) => {
+    try {
+      response.json({ groups: await database.listUserGroups(request.user.id) });
+    } catch (error) {
+      logEvent('warn', 'group_membership_list_failed', {
+        requestId: request.requestId,
+        path: request.path,
+        error: redactError(error)
+      });
+      next(error);
+    }
+  });
+
   router.post('/', passport.authenticate('jwt', { session: false }), async (request, response, next) => {
     try {
       const { name } = request.body ?? {};

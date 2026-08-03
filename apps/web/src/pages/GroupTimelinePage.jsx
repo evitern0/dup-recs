@@ -1,17 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.jsx';
+import { GroupActions } from '../components/groups/GroupActions.jsx';
 import { MemberList } from '../components/groups/MemberList.jsx';
 import { InviteForm } from '../components/groups/InviteForm.jsx';
 import { NewRecComposer } from '../components/timeline/NewRecComposer.jsx';
 import { TimelineFeed } from '../components/timeline/TimelineFeed.jsx';
 
 export function GroupTimelinePage({ onSelectGroup }) {
-  const { session, apiRequest: authedRequest } = useAuth();
-  const navigate = useNavigate();
-  const [groupName, setGroupName] = useState('');
+  const { session, apiRequest: authedRequest, refreshMemberships } = useAuth();
   const [groupId, setGroupId] = useState(session.activeGroupId ?? '');
-  const [inviteToken, setInviteToken] = useState('');
   const [members, setMembers] = useState([]);
   const [posts, setPosts] = useState([]);
   const [nextCursor, setNextCursor] = useState(null);
@@ -19,6 +16,7 @@ export function GroupTimelinePage({ onSelectGroup }) {
   const [error, setError] = useState('');
   const [openCommentIds, setOpenCommentIds] = useState(() => new Set());
   const loadMoreAnchor = useRef(null);
+  const currentGroupName = session.groups?.find((group) => group.id === groupId)?.name;
 
   useEffect(() => {
     if (groupId) {
@@ -63,9 +61,10 @@ export function GroupTimelinePage({ onSelectGroup }) {
     setNextCursor(timeline.nextCursor ?? null);
   }
 
-  async function createGroup() {
+  async function createGroup(groupName) {
     const response = await authedRequest('/groups', { method: 'POST', body: { name: groupName } });
     setGroupId(response.group.id);
+    await refreshMemberships(response.group.id);
     onSelectGroup(response.group.id);
     await loadGroup(response.group.id);
   }
@@ -73,6 +72,7 @@ export function GroupTimelinePage({ onSelectGroup }) {
   async function joinGroupByInvite(currentInviteToken) {
     const response = await authedRequest('/groups/join', { method: 'POST', body: { inviteToken: currentInviteToken } });
     setGroupId(response.membership.groupId);
+    await refreshMemberships(response.membership.groupId);
     onSelectGroup(response.membership.groupId);
     await loadGroup(response.membership.groupId);
   }
@@ -102,14 +102,7 @@ export function GroupTimelinePage({ onSelectGroup }) {
         <section className="surface stack">
           <h1>Welcome, {session.user.username}</h1>
           <p className="helper">Create a group or join one through an invite to unlock the timeline.</p>
-          <input placeholder="Group name" value={groupName} onChange={(event) => setGroupName(event.target.value)} />
-          <button className="button" type="button" onClick={createGroup}>
-            Create group
-          </button>
-          <input placeholder="Invite token" value={inviteToken} onChange={(event) => setInviteToken(event.target.value)} />
-          <button className="button-secondary" type="button" onClick={() => joinGroupByInvite(inviteToken)}>
-            Join with invite
-          </button>
+          <GroupActions onCreateGroup={createGroup} onJoinGroup={joinGroupByInvite} />
           {error ? <p className="helper">{error}</p> : null}
         </section>
       </div>
@@ -122,12 +115,9 @@ export function GroupTimelinePage({ onSelectGroup }) {
         <section className="surface stack">
           <div className="row" style={{ justifyContent: 'space-between' }}>
             <div>
-              <h1 style={{ margin: 0 }}>Your timeline</h1>
-              <p className="helper">Recent recs from your group, newest first.</p>
+              <h1 style={{ margin: 0 }}>{currentGroupName ? `Viewing ${currentGroupName}` : 'Your timeline'}</h1>
+              <p className="helper">Recent recs from {currentGroupName ?? 'your group'}, newest first.</p>
             </div>
-            <button className="button-secondary" type="button" onClick={() => navigate(`/users/${session.user.username}`)}>
-              My profile
-            </button>
           </div>
           {error ? <p className="helper">{error}</p> : null}
         </section>
@@ -149,6 +139,7 @@ export function GroupTimelinePage({ onSelectGroup }) {
       <div className="stack">
         <InviteForm onInvite={inviteMember} />
         <MemberList members={members} />
+        <GroupActions onCreateGroup={createGroup} onJoinGroup={joinGroupByInvite} />
       </div>
     </div>
   );

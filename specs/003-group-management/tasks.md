@@ -18,8 +18,8 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 [P] Create feature test scaffolding for the new flow in apps/api/tests/contract/group-management.test.ts and apps/web/tests/feature/group-management.test.jsx
-- [ ] T002 [P] Extract the shared create/join controls into apps/web/src/components/groups/GroupActions.jsx and update apps/web/src/pages/GroupTimelinePage.jsx to use it
+- [X] T001 [P] Create feature test scaffolding for the new flow in apps/api/tests/contract/group-management.test.ts and apps/web/tests/feature/group-management.test.jsx
+- [X] T002 [P] Extract the shared create/join controls into apps/web/src/components/groups/GroupActions.jsx and update apps/web/src/pages/GroupTimelinePage.jsx to use it
 
 ---
 
@@ -29,9 +29,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 [P] Add a membership summary payload shape to apps/api/tests/http.ts and the repository query for the signed-in user's groups in apps/api/src/lib/repository.ts
-- [ ] T004 [P] Expose GET /api/groups/mine from apps/api/src/groups/routes.ts and register the route in apps/api/src/app.ts if needed
-- [ ] T005 [P] Add authenticated app-shell routing support in apps/web/src/App.jsx, apps/web/src/hooks/useAuth.jsx, and apps/web/src/pages/AuthPage.jsx for the new management route
+- [X] T003 [P] Add a membership summary payload shape to apps/api/tests/http.ts and the repository query for the signed-in user's groups in apps/api/src/lib/repository.ts
+- [X] T004 [P] Expose GET /api/groups/mine from apps/api/src/groups/routes.ts and register the route in apps/api/src/app.ts if needed
+- [X] T005 [P] Add authenticated app-shell routing support in apps/web/src/App.jsx, apps/web/src/hooks/useAuth.jsx, and apps/web/src/pages/AuthPage.jsx for the new management route
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -45,14 +45,14 @@
 
 ### Tests for User Story 1
 
-- [ ] T006 [P] [US1] Add API contract coverage for GET /api/groups/mine and create/join continuity in apps/api/tests/contract/group-management.test.ts
-- [ ] T007 [P] [US1] Add web feature coverage for the management landing page and create/join actions in apps/web/tests/feature/group-management.test.jsx
+- [X] T006 [P] [US1] Add API contract coverage for GET /api/groups/mine and create/join continuity in apps/api/tests/contract/group-management.test.ts
+- [X] T007 [P] [US1] Add web feature coverage for the management landing page and create/join actions in apps/web/tests/feature/group-management.test.jsx
 
 ### Implementation for User Story 1
 
-- [ ] T008 [US1] Implement the current-user group list query and GET /api/groups/mine response in apps/api/src/lib/repository.ts and apps/api/src/groups/routes.ts
-- [ ] T009 [US1] Build the group management page in apps/web/src/pages/GroupManagementPage.jsx to list memberships and reuse apps/web/src/components/groups/GroupActions.jsx
-- [ ] T010 [US1] Add the signed-in management route and top-level navigation entry in apps/web/src/App.jsx and apps/web/src/pages/AuthPage.jsx so the page is reachable at any time
+- [X] T008 [US1] Implement the current-user group list query and GET /api/groups/mine response in apps/api/src/lib/repository.ts and apps/api/src/groups/routes.ts
+- [X] T009 [US1] Build the group management page in apps/web/src/pages/GroupManagementPage.jsx to list memberships and reuse apps/web/src/components/groups/GroupActions.jsx
+- [X] T010 [US1] Add the signed-in management route and top-level navigation entry in apps/web/src/App.jsx and apps/web/src/pages/AuthPage.jsx so the page is reachable at any time
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -66,11 +66,11 @@
 
 ### Tests for User Story 2
 
-- [ ] T011 [P] [US2] Add a web feature test for clicking a listed group name and opening its timeline in apps/web/tests/feature/group-management.test.jsx
+- [X] T011 [P] [US2] Add a web feature test for clicking a listed group name and opening its timeline in apps/web/tests/feature/group-management.test.jsx
 
 ### Implementation for User Story 2
 
-- [ ] T012 [US2] Make the group list entries clickable in apps/web/src/pages/GroupManagementPage.jsx so each row updates the active group via apps/web/src/hooks/useAuth.jsx and navigates to /app
+- [X] T012 [US2] Make the group list entries clickable in apps/web/src/pages/GroupManagementPage.jsx so each row updates the active group via apps/web/src/hooks/useAuth.jsx and navigates to /app
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -84,12 +84,12 @@
 
 ### Tests for User Story 3
 
-- [ ] T013 [P] [US3] Add login landing coverage for zero-, one-, and multi-group users in apps/api/tests/contract/group-management.test.ts and apps/web/tests/feature/group-management.test.jsx
+- [X] T013 [P] [US3] Add login landing coverage for zero-, one-, and multi-group users in apps/api/tests/contract/group-management.test.ts and apps/web/tests/feature/group-management.test.jsx
 
 ### Implementation for User Story 3
 
-- [ ] T014 [US3] Implement membership-aware login landing in apps/web/src/pages/AuthPage.jsx and apps/web/src/hooks/useAuth.jsx by querying GET /api/groups/mine after authentication
-- [ ] T015 [US3] Route exactly-one-group users directly to that group's timeline and all other users to the management page in apps/web/src/App.jsx and apps/web/src/pages/AuthPage.jsx
+- [X] T014 [US3] Implement membership-aware login landing in apps/web/src/pages/AuthPage.jsx and apps/web/src/hooks/useAuth.jsx by querying GET /api/groups/mine after authentication
+- [X] T015 [US3] Route exactly-one-group users directly to that group's timeline and all other users to the management page in apps/web/src/App.jsx and apps/web/src/pages/AuthPage.jsx
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -99,8 +99,8 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T016 [P] Update specs/003-group-management/quickstart.md with the final manual verification steps for login routing and group selection
-- [ ] T017 Run pnpm --filter @dup-recs/api test, pnpm --filter @dup-recs/api typecheck, and pnpm --filter @dup-recs/web test -- --run to validate the feature end to end
+- [X] T016 [P] Update specs/003-group-management/quickstart.md with the final manual verification steps for login routing and group selection
+- [X] T017 Run pnpm --filter @dup-recs/api test, pnpm --filter @dup-recs/api typecheck, and pnpm --filter @dup-recs/web test -- --run to validate the feature end to end
 
 ---
 
