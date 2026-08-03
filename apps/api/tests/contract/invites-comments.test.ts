@@ -6,7 +6,7 @@ import { jsonOf, type AuthPayload, type GroupPayload, type InvitationPayload, ty
 import { startTestServer } from '../test-server.js';
 
 test('invite and comments contract shape', async () => {
-  const database = await createDatabase();
+  const database = await createDatabase({ adapter: 'pg-mem' });
   const { server, baseUrl, close } = await startTestServer(createApp(database));
 
   try {

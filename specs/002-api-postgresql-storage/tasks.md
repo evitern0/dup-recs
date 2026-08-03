@@ -212,5 +212,5 @@ description: "Task list for API PostgreSQL storage migration"
 
 ## Phase 8: Convergence
 
-- [ ] T046 Remove implicit in-memory fallback from API database bootstrap so runtime storage is PostgreSQL-backed by contract per FR-001 and plan: storage decision (contradicts)
-- [ ] T047 Update durability/regression verification to run restart persistence checks against PostgreSQL-backed configuration (DATABASE_URL required) per SC-001 and SC-005 (partial)
+- [X] T046 Remove implicit in-memory fallback from API database bootstrap so runtime storage is PostgreSQL-backed by contract per FR-001 and plan: storage decision (contradicts)
+- [X] T047 Update durability/regression verification to run restart persistence checks against PostgreSQL-backed configuration (DATABASE_URL required) per SC-001 and SC-005 (partial)

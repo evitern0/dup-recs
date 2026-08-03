@@ -6,7 +6,7 @@ import { jsonOf, type AuthPayload, type GroupPayload, type InvitationPayload, ty
 import { startTestServer } from '../test-server.js';
 
 test('creates invites and comments on posts', async () => {
-  const database = await createDatabase();
+  const database = await createDatabase({ adapter: 'pg-mem' });
   const { server, baseUrl, close } = await startTestServer(createApp(database));
 
   try {
@@ -70,7 +70,7 @@ test('creates invites and comments on posts', async () => {
 });
 
 test('returns safe failure response and emits diagnostics when storage is interrupted', async () => {
-  const database = await createDatabase();
+  const database = await createDatabase({ adapter: 'pg-mem' });
   const { server, baseUrl, close } = await startTestServer(createApp(database));
   const originalConsoleError = console.error;
   const errorEvents = [];

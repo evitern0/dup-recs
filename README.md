@@ -58,6 +58,29 @@ Set the server environment variables required by the API before running it local
 The API requires a reachable PostgreSQL 18 instance. A sample local configuration is
 provided in `apps/api/.env.example`.
 
+### Start PostgreSQL Locally
+
+You can run PostgreSQL locally with Docker using the compose file at
+`docker/docker-compose.yml`.
+
+Start PostgreSQL:
+
+```bash
+docker compose -f docker/docker-compose.yml up -d postgres
+```
+
+Stop PostgreSQL:
+
+```bash
+docker compose -f docker/docker-compose.yml down
+```
+
+With the default compose credentials, use this connection string:
+
+```bash
+DATABASE_URL=postgres://dup_recs:dup_recs@localhost:5432/dup_recs
+```
+
 ### Run the Apps
 
 ```bash

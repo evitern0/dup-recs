@@ -6,7 +6,7 @@ import { jsonOf, type AuthPayload, type GroupPayload } from '../http.js';
 import { startTestServer } from '../test-server.js';
 
 test('registers a user and creates a group', async () => {
-  const database = await createDatabase();
+  const database = await createDatabase({ adapter: 'pg-mem' });
   const { server, baseUrl, close } = await startTestServer(createApp(database));
 
   try {

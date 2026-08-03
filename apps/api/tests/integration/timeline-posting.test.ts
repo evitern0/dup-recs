@@ -6,7 +6,7 @@ import { jsonOf, type AuthPayload, type GroupPayload, type AlbumSearchPayload, t
 import { startTestServer } from '../test-server.js';
 
 test('searches albums and paginates the timeline', async () => {
-  const database = await createDatabase();
+  const database = await createDatabase({ adapter: 'pg-mem' });
   const { server, baseUrl, close } = await startTestServer(createApp(database));
 
   try {
@@ -54,8 +54,8 @@ test('searches albums and paginates the timeline', async () => {
   }
 });
 
-test('keeps timeline data after API restart', async () => {
-  const database = await createDatabase();
+test('keeps timeline data after API restart', { skip: !process.env.DATABASE_URL }, async () => {
+  const database = await createDatabase({ connectionString: process.env.DATABASE_URL });
   const first = await startTestServer(createApp(database));
 
   try {

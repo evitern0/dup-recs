@@ -6,7 +6,7 @@ import { jsonOf, type AuthPayload, type GroupPayload, type UserPostsPayload } fr
 import { startTestServer } from '../test-server.js';
 
 test('loads a member profile history in chronological order', async () => {
-  const database = await createDatabase();
+  const database = await createDatabase({ adapter: 'pg-mem' });
   const { server, baseUrl, close } = await startTestServer(createApp(database));
 
   try {

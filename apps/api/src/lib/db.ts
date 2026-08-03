@@ -42,16 +42,15 @@ interface DatabaseOptions {
   connectionString?: string;
   migrationsDir?: string;
   runMigrations?: boolean;
+  adapter?: 'postgres' | 'pg-mem';
 }
 
 export async function createDatabase(options: DatabaseOptions = {}) {
   const config = options;
   let pool;
-  const connectionString = config.connectionString ?? process.env.DATABASE_URL;
+  const adapter = config.adapter ?? 'postgres';
 
-  if (connectionString) {
-    pool = new Pool({ connectionString });
-  } else {
+  if (adapter === 'pg-mem') {
     const { newDb } = await import('pg-mem');
     const inMemoryDb = newDb();
     inMemoryDb.public.registerFunction({
@@ -67,6 +66,12 @@ export async function createDatabase(options: DatabaseOptions = {}) {
     });
     const pgMem = inMemoryDb.adapters.createPg();
     pool = new pgMem.Pool();
+  } else {
+    const connectionString = config.connectionString ?? process.env.DATABASE_URL;
+    if (!connectionString) {
+      throw new Error('DATABASE_URL is required');
+    }
+    pool = new Pool({ connectionString });
   }
 
   try {
