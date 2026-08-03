@@ -6,7 +6,7 @@ import { assertLength, assertUsername, isEmail } from '@dup-recs/shared';
 export function buildAuthRouter(database) {
   const router = Router();
 
-  router.post('/register', (request, response, next) => {
+  router.post('/register', async (request, response, next) => {
     try {
       const { email, username, password } = request.body ?? {};
       if (!isEmail(email)) {
@@ -15,10 +15,13 @@ export function buildAuthRouter(database) {
       assertUsername(username);
       assertLength(password, 255, 'password');
 
-      const user = database.createUser({ email, username, password });
+      const user = await database.createUser({ email, username, password });
       const token = jwt.sign({ sub: user.id, email: user.email, username: user.username }, process.env.JWT_SECRET ?? 'dev-secret');
       return response.status(201).json({ user: sanitizeUser(user), token });
     } catch (error) {
+      if (error?.code === 'EMAIL_EXISTS' || error?.code === 'USERNAME_EXISTS') {
+        return response.status(409).json({ error: error.message });
+      }
       return next(error);
     }
   });

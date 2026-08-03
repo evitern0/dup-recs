@@ -5,7 +5,7 @@
   "type": "module",
   "main": "./src/index.ts",
   "scripts": {
-    "dev": "tsx ./src/index.ts",
+    "dev": "tsx --env-file=.env ./src/index.ts",
     "start": "tsx ./src/index.ts",
     "test": "tsx --test tests/**/*.test.ts",
     "typecheck": "tsc --noEmit"
@@ -16,9 +16,11 @@
     "cors": "^2.8.6",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
@@ -28,6 +30,8 @@
     "@types/passport": "^1.0.17",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
+    "@types/pg": "^8.11.10",
+    "pg-mem": "^3.0.5",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }

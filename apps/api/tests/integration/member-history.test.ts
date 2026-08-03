@@ -2,10 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createApp } from '../../src/app.js';
 import { createDatabase } from '../../src/lib/db.js';
+import { jsonOf, type AuthPayload, type GroupPayload, type UserPostsPayload } from '../http.js';
 import { startTestServer } from '../test-server.js';
 
 test('loads a member profile history in chronological order', async () => {
-  const database = createDatabase();
+  const database = await createDatabase({ adapter: 'pg-mem' });
   const { server, baseUrl, close } = await startTestServer(createApp(database));
 
   try {
@@ -13,13 +14,13 @@ test('loads a member profile history in chronological order', async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: 'owner@example.com', username: 'owner', password: 'secret123' })
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<AuthPayload>(response));
 
     const group = await fetch(`${baseUrl}/api/groups`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${owner.token}` },
       body: JSON.stringify({ name: 'History Club' })
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<GroupPayload>(response));
 
     await fetch(`${baseUrl}/api/groups/${group.group.id}/posts`, {
       method: 'POST',
@@ -36,12 +37,13 @@ test('loads a member profile history in chronological order', async () => {
 
     const profile = await fetch(`${baseUrl}/api/users/owner/posts`, {
       headers: { Authorization: `Bearer ${owner.token}` }
-    }).then((response) => response.json());
+    }).then((response) => jsonOf<UserPostsPayload>(response));
 
     assert.equal(profile.user.username, 'owner');
     assert.equal(profile.posts.length, 1);
   } finally {
     await close();
+    await database.close();
     server.unref();
   }
 });

@@ -51,9 +51,35 @@ Set the server environment variables required by the API before running it local
 
 - `PORT`: API port, defaults to `3001`
 - `JWT_SECRET`: secret used to sign JWTs
-- Any PostgreSQL connection settings used by your database layer
+- `DATABASE_URL`: PostgreSQL 18 connection string used by the API data layer
 - Any Passport OAuth provider settings you enable
 - Any MusicBrainz configuration required by your album search integration
+
+The API requires a reachable PostgreSQL 18 instance. A sample local configuration is
+provided in `apps/api/.env.example`.
+
+### Start PostgreSQL Locally
+
+You can run PostgreSQL locally with Docker using the compose file at
+`docker/docker-compose.yml`.
+
+Start PostgreSQL:
+
+```bash
+docker compose -f docker/docker-compose.yml up -d postgres
+```
+
+Stop PostgreSQL:
+
+```bash
+docker compose -f docker/docker-compose.yml down
+```
+
+With the default compose credentials, use this connection string:
+
+```bash
+DATABASE_URL=postgres://dup_recs:dup_recs@localhost:5432/dup_recs
+```
 
 ### Run the Apps
 
@@ -100,3 +126,10 @@ The current feature set is defined in [specs/001-group-album-feed/spec.md](specs
 
 - The monorepo is intentionally split into API, web, and shared packages so common validation and contract rules can stay aligned.
 - The app is designed to stay mobile-first and lightweight on the frontend while keeping membership checks enforced on the server.
+
+## Migration Policy
+
+- Database DDL changes are tracked as ordered SQL files in `apps/api/migrations/`.
+- Applied migration files are immutable; never edit historical files in shared environments.
+- Introduce changes through new numbered migration files and prefer forward-fix migrations over in-place edits.
+- The active UUIDv7 PostgreSQL schema baseline starts at `002_uuidv7_base.sql`.

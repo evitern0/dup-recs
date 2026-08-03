@@ -1,11 +1,11 @@
 import { requireMembership } from '../lib/authorization.js';
 
-export function listComments(database, postId, userId) {
-  const post = database.getPostById(postId);
+export async function listComments(database, postId, userId) {
+  const post = await database.getPostById(postId);
   if (!post) {
     throw new Error('post not found');
   }
-  requireMembership(database, post.groupId, userId);
+  await requireMembership(database, post.groupId, userId);
   return database.listCommentsForPost(postId);
 }
 

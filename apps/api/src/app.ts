@@ -7,6 +7,7 @@ import { buildGroupsRouter } from './groups/routes.js';
 import { buildPostsRouter } from './posts/routes.js';
 import { buildCommentsRouter } from './comments/routes.js';
 import { buildUsersRouter } from './users/routes.js';
+import { createRequestId, logEvent, redactError } from './lib/logger.js';
 
 export function createApp(database) {
   configurePassport(database);
@@ -18,6 +19,11 @@ export function createApp(database) {
   }));
   app.use(express.json());
   app.use(passport.initialize());
+  app.use((request, response, next) => {
+    request.requestId = createRequestId();
+    response.setHeader('x-request-id', request.requestId);
+    next();
+  });
 
   app.get('/health', (request, response) => response.json({ ok: true }));
   app.use('/api/auth', buildAuthRouter(database));
@@ -32,6 +38,22 @@ export function createApp(database) {
     }
 
     const statusCode = error.statusCode ?? 400;
+    const event = request.path.includes('/groups')
+      ? 'group_request_failed'
+      : request.path.includes('/posts')
+        ? 'post_request_failed'
+        : request.path.includes('/comments')
+          ? 'comment_request_failed'
+          : 'api_request_failed';
+
+    logEvent(statusCode >= 500 ? 'error' : 'warn', event, {
+      requestId: request.requestId,
+      method: request.method,
+      path: request.path,
+      statusCode,
+      error: redactError(error)
+    });
+
     response.status(statusCode).json({ error: error.message ?? 'unexpected error' });
   });
 
