@@ -1,0 +1,15 @@
+# docker-compose.yml
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: dup_recs
+      POSTGRES_USER: dup_recs
+      POSTGRES_PASSWORD: dup_recs
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+volumes:
+  pgdata:
